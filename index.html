@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Info Elite Soft - Soluções em informática, hardware, software e suporte técnico especializado.">
+  <title>Info Elite Soft - Soluções em Informática</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #0f172a;
+      --accent: #06b6d4;
+      --light: #f8fafc;
+      --gray: #64748b;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #334155;
+      line-height: 1.6;
+    }
+    /* Header */
+    header {
+      background: var(--secondary);
+      color: white;
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo span { color: var(--accent); }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+    }
+    nav a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: var(--accent); }
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, var(--secondary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 150px 20px 100px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: #cbd5e1;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 15px 30px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
+    }
+    /* Sections */
+    section {
+      padding: 80px 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .section-title h2 {
+      font-size: 2.5rem;
+      color: var(--secondary);
+      margin-bottom: 10px;
+    }
+    .section-title p {
+      color: var(--gray);
+      font-size: 1.1rem;
+    }
+    /* Serviços */
+    .servicos { background: var(--light); }
+    .servicos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+    .servico-card {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      transition: transform 0.3s;
+    }
+    .servico-card:hover { transform: translateY(-10px); }
+    .servico-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    .servico-card h3 {
+      color: var(--secondary);
+      margin-bottom: 15px;
+    }
+    .servico-card p { color: var(--gray); }
+    /* Produtos */
+    .produtos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+    .produto-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      transition: transform 0.3s;
+    }
+    .produto-card:hover { transform: translateY(-5px); }
+    .produto-img {
+      height: 180px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+    .produto-info {
+      padding: 25px;
+    }
+    .produto-info h3 {
+      color: var(--secondary);
+      margin-bottom: 10px;
+    }
+    .produto-info p {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+    .produto-preco {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    /* Sobre */
+    .sobre { background: var(--light); }
+    .sobre-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+    .sobre-text h3 {
+      font-size: 1.8rem;
+      color: var(--secondary);
+      margin-bottom: 20px;
+    }
+    .sobre-text p {
+      color: var(--gray);
+      margin-bottom: 15px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .stat {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    .stat-label {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+    /* Contato */
+    .contato-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+    .contato-card {
+      text-align: center;
+      padding: 30px;
+    }
+    .contato-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+    .contato-card h3 {
+      color: var(--secondary);
+      margin-bottom: 10px;
+    }
+    .contato-card p { color: var(--gray); }
+    /* Footer */
+    footer {
+      background: var(--secondary);
+      color: #94a3b8;
+      padding: 50px 20px 20px;
+    }
+    .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-col h4 {
+      color: white;
+      margin-bottom: 20px;
+    }
+    .footer-col a {
+      display: block;
+      color: #94a3b8;
+      text-decoration: none;
+      margin-bottom: 10px;
+      transition: color 0.3s;
+    }
+    .footer-col a:hover { color: var(--accent); }
+    .footer-bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid #334155;
+    }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      .sobre-content { grid-template-columns: 1fr; }
+      nav ul { gap: 15px; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="logo">💻 Info <span>Elite Soft</span></div>
+      <nav>
+        <ul>
+          <li><a href="#inicio">Início</a></li>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#produtos">Produtos</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="inicio">
+    <h1>Soluções em Informática</h1>
+    <p>Hardware, software e suporte técnico especializado para sua empresa ou residência. Qualidade e confiança que você merece.</p>
+    <a href="#produtos" class="btn">Ver Produtos</a>
+  </section>
+
+  <!-- Serviços -->
+  <section class="servicos" id="servicos">
+    <div class="container">
+      <div class="section-title">
+        <h2>Nossos Serviços</h2>
+        <p>Soluções completas para suas necessidades tecnológicas</p>
+      </div>
+      <div class="servicos-grid">
+        <div class="servico-card">
+          <div class="servico-icon">🖥️</div>
+          <h3>Venda de Hardware</h3>
+          <p>Computadores, notebooks, periféricos e componentes das melhores marcas com garantia.</p>
+        </div>
+        <div class="servico-card">
+          <div class="servico-icon">💿</div>
+          <h3>Software e Licenças</h3>
+          <p>Sistemas operacionais, antivírus, pacotes Office e softwares profissionais originais.</p>
+        </div>
+        <div class="servico-card">
+          <div class="servico-icon">🔧</div>
+          <h3>Manutenção</h3>
+          <p>Reparo e manutenção preventiva de computadores, notebooks e equipamentos.</p>
+        </div>
+        <div class="servico-card">
+          <div class="servico-icon">🌐</div>
+          <h3>Redes e Infraestrutura</h3>
+          <p>Instalação e configuração de redes, servidores e infraestrutura de TI.</p>
+        </div>
+        <div class="servico-card">
+          <div class="servico-icon">📱</div>
+          <h3>Suporte Técnico</h3>
+          <p>Atendimento remoto e presencial para resolver seus problemas tecnológicos.</p>
+        </div>
+        <div class="servico-card">
+          <div class="servico-icon">☁️</div>
+          <h3>Cloud e Backup</h3>
+          <p>Soluções em nuvem e backup de dados para proteger suas informações.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Produtos -->
+  <section class="produtos" id="produtos">
+    <div class="container">
+      <div class="section-title">
+        <h2>Produtos em Destaque</h2>
+        <p>Os melhores produtos de informática com preços competitivos</p>
+      </div>
+      <div class="produtos-grid">
+        <div class="produto-card">
+          <div class="produto-img">💻</div>
+          <div class="produto-info">
+            <h3>Notebook Profissional</h3>
+            <p>Intel i7, 16GB RAM, SSD 512GB, Tela 15.6" Full HD</p>
+            <div class="produto-preco">R$ 4.299,00</div>
+          </div>
+        </div>
+        <div class="produto-card">
+          <div class="produto-img">🖥️</div>
+          <div class="produto-info">
+            <h3>Desktop Gamer</h3>
+            <p>AMD Ryzen 7, 32GB RAM, RTX 4060, SSD 1TB</p>
+            <div class="produto-preco">R$ 6.499,00</div>
+          </div>
+        </div>
+        <div class="produto-card">
+          <div class="produto-img">🖨️</div>
+          <div class="produto-info">
+            <h3>Impressora Multifuncional</h3>
+            <p>Wi-Fi, Scanner, Copiadora, Impressão Frente e Verso</p>
+            <div class="produto-preco">R$ 899,00</div>
+          </div>
+        </div>
+        <div class="produto-card">
+          <div class="produto-img">🎧</div>
+          <div class="produto-info">
+            <h3>Headset Gamer</h3>
+            <p>Surround 7.1, Microfone Retrátil, RGB, Confortável</p>
+            <div class="produto-preco">R$ 249,00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sobre -->
+  <section class="sobre" id="sobre">
+    <div class="container">
+      <div class="sobre-content">
+        <div class="sobre-text">
+          <h3>Sobre a Info Elite Soft</h3>
+          <p>A Info Elite Soft é uma empresa especializada em soluções de informática, atuando no mercado com qualidade e compromisso.</p>
+          <p>Oferecemos produtos de hardware e software das melhores marcas, além de serviços de manutenção, suporte técnico e infraestrutura de TI.</p>
+          <p>Nossa missão é proporcionar as melhores soluções tecnológicas com atendimento personalizado e preços justos.</p>
+          <a href="#contato" class="btn">Fale Conosco</a>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Clientes Atendidos</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">1000+</div>
+            <div class="stat-label">Produtos Vendidos</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">5+</div>
+            <div class="stat-label">Anos de Experiência</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">98%</div>
+            <div class="stat-label">Satisfação</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contato -->
+  <section class="contato" id="contato">
+    <div class="container">
+      <div class="section-title">
+        <h2>Entre em Contato</h2>
+        <p>Estamos prontos para atender você</p>
+      </div>
+      <div class="contato-grid">
+        <div class="contato-card">
+          <div class="contato-icon">📧</div>
+          <h3>E-mail</h3>
+          <p>contato@infoelitesoft.com.br</p>
+        </div>
+        <div class="contato-card">
+          <div class="contato-icon">📱</div>
+          <h3>WhatsApp</h3>
+          <p>(11) 99999-9999</p>
+        </div>
+        <div class="contato-card">
+          <div class="contato-icon">📍</div>
+          <h3>Endereço</h3>
+          <p>São Paulo, SP - Brasil</p>
+        </div>
+        <div class="contato-card">
+          <div class="contato-icon">🕐</div>
+          <h3>Horário</h3>
+          <p>Seg-Sex: 9h às 18h</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Info Elite Soft</h4>
+        <p>Soluções completas em informática para sua empresa ou residência.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Links Rápidos</h4>
+        <a href="#inicio">Início</a>
+        <a href="#servicos">Serviços</a>
+        <a href="#produtos">Produtos</a>
+        <a href="#contato">Contato</a>
+      </div>
+      <div class="footer-col">
+        <h4>Serviços</h4>
+        <a href="#servicos">Venda de Hardware</a>
+        <a href="#servicos">Software</a>
+        <a href="#servicos">Manutenção</a>
+        <a href="#servicos">Suporte Técnico</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="termos.html">Termos de Uso</a>
+        <a href="privacidade.html">Política de Privacidade</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Info Elite Soft. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>
