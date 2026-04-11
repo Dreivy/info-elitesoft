@@ -981,13 +981,10 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
-    // Inicializar EmailJS (substitua com sua chave pública do EmailJS)
-    (function() {
-      // Registre-se em https://www.emailjs.com para obter sua chave pública
-      emailjs.init("SUA_CHAVE_PUBLICA_AQUI");
-    })();
+    // Sistema de email com FormSubmit (sem cadastro necessário!)
+    // Basta trocar SEU_EMAIL_AQUI pelo seu email real
+    const EMAIL_LOJA = "SEU_EMAIL_AQUI@gmail.com"; // <-- TROQUE AQUI!
     // Dados dos produtos
     const produtos = [
       { id: 1, nome: "Camisa de Time Oficial do Brasil", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.45.jpeg", preco: 149.90 },
@@ -1267,43 +1264,41 @@
       alert('✅ Pedido realizado com sucesso!\n\n📧 Um email de confirmação foi enviado para ' + dados.email + '\n\nVocê será redirecionado para o pagamento.');
     }
 
-    // Enviar email de confirmação
+    // Enviar email de confirmação (usando FormSubmit - sem cadastro!)
     function enviarEmailConfirmacao(dados) {
       const listaItens = dados.itens.map(item => 
         `- ${item.nome} (Tamanho: ${item.tamanho}, Qtd: ${item.quantidade}) - R$ ${(item.preco * item.quantidade).toFixed(2)}`
       ).join('\n');
 
-      const templateParams = {
-        to_name: dados.nome,
-        to_email: dados.email,
-        pedido_numero: 'FUT-' + Date.now().toString().slice(-6),
-        data_pedido: new Date().toLocaleDateString('pt-BR'),
-        itens_pedido: listaItens,
-        total_pedido: `R$ ${dados.total.toFixed(2).replace('.', ',')}`,
-        nome_cliente: dados.nome,
-        email_cliente: dados.email,
-        telefone_cliente: dados.telefone,
-        cpf_cliente: dados.cpf,
-        endereco_completo: `${dados.endereco.logradouro}, ${dados.endereco.numero} ${dados.endereco.complemento ? '- ' + dados.endereco.complemento : ''}\n${dados.endereco.bairro} - ${dados.endereco.cidade}/${dados.endereco.estado}\nCEP: ${dados.endereco.cep}`,
-        frete: 'GRÁTIS',
-        reply_to: 'contato@futstore.com.br'
-      };
+      const pedidoNumero = 'FUT-' + Date.now().toString().slice(-6);
 
-      // Enviar email para o cliente
-      emailjs.send('service_futstore', 'template_confirmacao_cliente', templateParams)
-        .then(function(response) {
-          console.log('Email enviado com sucesso!', response.status, response.text);
-        }, function(error) {
-          console.log('Erro ao enviar email:', error);
-        });
-
-      // Enviar email de notificação para o dono da loja
-      emailjs.send('service_futstore', 'template_novo_pedido_loja', templateParams)
-        .then(function(response) {
-          console.log('Notificação enviada para a loja!', response.status, response.text);
-        }, function(error) {
-          console.log('Erro ao enviar notificação:', error);
-        });
+      // Enviar email para o cliente (cópia)
+      fetch(`https://formsubmit.co/ajax/${EMAIL_LOJA}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `✅ Novo Pedido ${pedidoNumero} - FutStore`,
+          _template: 'table',
+          _captcha: 'false',
+          _cc: dados.email, // Envia cópia para o cliente
+          '📦 Pedido': pedidoNumero,
+          '📅 Data': new Date().toLocaleDateString('pt-BR'),
+          '👤 Cliente': dados.nome,
+          '📧 Email': dados.email,
+          '📱 Telefone': dados.telefone,
+          '📋 CPF': dados.cpf,
+          '🛒 Itens': listaItens,
+          '💰 Total': `R$ ${dados.total.toFixed(2).replace('.', ',')}`,
+          '🚚 Frete': 'GRÁTIS',
+          '📍 Endereço': `${dados.endereco.logradouro}, ${dados.endereco.numero} ${dados.endereco.complemento ? '- ' + dados.endereco.complemento : ''}, ${dados.endereco.bairro} - ${dados.endereco.cidade}/${dados.endereco.estado}, CEP: ${dados.endereco.cep}`
+        })
+      })
+      .then(response => response.json())
+      .then(data => console.log('Email enviado com sucesso!', data))
+      .catch(error => console.log('Erro ao enviar email:', error));
     }
 
     // Inicializar

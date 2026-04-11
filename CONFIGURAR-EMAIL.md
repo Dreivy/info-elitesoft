@@ -1,112 +1,59 @@
-# 📧 Configuração do EmailJS - FutStore
+# 📧 Configuração de Email - FutStore
 
-## O que é o EmailJS?
-EmailJS é um serviço gratuito que permite enviar emails diretamente do frontend (JavaScript) sem precisar de backend.
+## ✅ Sistema Atual: FormSubmit (ZERO cadastro!)
 
-## 🚀 Como Configurar (5 minutos):
+O site agora usa **FormSubmit.co** - não precisa criar conta em lugar nenhum!
 
-### Passo 1: Criar conta no EmailJS
-1. Acesse: https://www.emailjs.com/
-2. Clique em **"Sign Up Free"**
-3. Crie sua conta gratuita (200 emails/mês grátis)
+### 🔧 Como Ativar (30 segundos):
 
-### Passo 2: Adicionar Serviço de Email
-1. No dashboard, clique em **"Email Services"**
-2. Clique em **"Add New Service"**
-3. Escolha **Gmail** (ou outro provedor)
-4. Conecte sua conta Gmail
-5. Anote o **Service ID** (ex: `service_futstore`)
+1. **Abra o arquivo `index.html`**
+2. **Procure por** (linha ~987):
+   ```javascript
+   const EMAIL_LOJA = "SEU_EMAIL_AQUI@gmail.com";
+   ```
+3. **Troque pelo seu email real**:
+   ```javascript
+   const EMAIL_LOJA = "seuemail@gmail.com";
+   ```
+4. **Salve e pronto!** ✅
 
-### Passo 3: Criar Template de Email para Cliente
-1. Vá em **"Email Templates"**
-2. Clique em **"Create New Template"**
-3. Use este template:
+### 📬 Como Funciona:
 
-**Assunto:** `✅ Confirmação de Pedido #{{pedido_numero}} - FutStore`
+Quando um cliente finaliza a compra:
+1. ✅ **Você recebe** um email com todos os dados do pedido
+2. ✅ **Cliente recebe** uma cópia do email de confirmação
+3. ✅ **Primeiro email**: Você precisa confirmar ativando o link que chega no seu email (só na primeira vez)
+4. ✅ **Depois**: Todos os emails chegam automaticamente!
 
-**Conteúdo:**
+### 📋 O que chega no email:
+
+| Campo | Exemplo |
+|-------|---------|
+| 📦 Pedido | FUT-123456 |
+| 📅 Data | 10/04/2026 |
+| 👤 Cliente | João Silva |
+| 📧 Email | joao@email.com |
+| 📱 Telefone | (11) 99999-9999 |
+| 📋 CPF | 123.456.789-00 |
+| 🛒 Itens | Lista completa com tamanhos |
+| 💰 Total | R$ 149,90 |
+| 🚚 Frete | GRÁTIS |
+| 📍 Endereço | Endereço completo |
+
+### ⚠️ Importante:
+
+- **Primeiro email**: Você receberá um email de confirmação do FormSubmit para ativar. Clique no link para ativar.
+- **Depois**: Todos os pedidos chegam automaticamente!
+- **Spam**: Verifique a caixa de spam se não encontrar o email.
+
+### 🆓 Limites:
+- ✅ Gratuito
+- ✅ Sem limite de emails
+- ✅ Sem cadastro necessário
+- ✅ Funciona com qualquer email (Gmail, Outlook, etc.)
+
+###  Arquivo para editar:
 ```
-Olá {{to_name}}!
-
-Seu pedido foi realizado com sucesso! 🎉
-
- Número do Pedido: {{pedido_numero}}
-📅 Data: {{data_pedido}}
-
-🛒 Itens do Pedido:
-{{itens_pedido}}
-
-💰 Total: {{total_pedido}}
-🚚 Frete: {{frete}}
-
-📍 Endereço de Entrega:
-{{endereco_completo}}
-
-Obrigado por comprar na FutStore! ⚽
-
-Qualquer dúvida, responda este email.
+info-elitesoft-site/index.html
 ```
-
-4. Salve e anote o **Template ID** (ex: `template_confirmacao_cliente`)
-
-### Passo 4: Criar Template de Email para Loja
-1. Crie outro template para notificação interna
-2. **Assunto:** `🛒 Novo Pedido #{{pedido_numero}} - FutStore`
-
-**Conteúdo:**
-```
-🔔 NOVO PEDIDO RECEBIDO!
-
-📦 Pedido: {{pedido_numero}}
-📅 Data: {{data_pedido}}
-
-👤 Cliente: {{nome_cliente}}
-📧 Email: {{email_cliente}}
-📱 Telefone: {{telefone_cliente}}
-📋 CPF: {{cpf_cliente}}
-
-🛒 Itens:
-{{itens_pedido}}
-
-💰 Total: {{total_pedido}}
-🚚 Frete: {{frete}}
-
-📍 Endereço:
-{{endereco_completo}}
-
----
-FutStore - Sistema de Pedidos
-```
-
-3. Salve e anote o **Template ID** (ex: `template_novo_pedido_loja`)
-
-### Passo 5: Pegar sua Chave Pública
-1. Vá em **"Account"** (canto superior direito)
-2. Copie sua **Public Key** (ex: `user_abc123xyz`)
-
-### Passo 6: Atualizar o Código
-No arquivo `index.html`, substitua:
-
-```javascript
-// Linha ~987
-emailjs.init("SUA_CHAVE_PUBLICA_AQUI");
-// Troque para:
-emailjs.init("user_abc123xyz"); // Sua chave real
-```
-
-E substitua os IDs dos templates e serviço nas funções `enviarEmailConfirmacao()`:
-- `service_futstore` → Seu Service ID real
-- `template_confirmacao_cliente` → Seu Template ID do cliente
-- `template_novo_pedido_loja` → Seu Template ID da loja
-
-## ✅ Pronto!
-
-Agora quando um cliente finalizar a compra:
-1. ✅ Recebe email de confirmação com detalhes do pedido
-2. ✅ Você recebe notificação do novo pedido
-3. ✅ Tudo automático, sem backend!
-
-## 📊 Limites do Plano Gratuito:
-- 200 emails/mês
-- Suficiente para começar!
-- Upgrade disponível se precisar de mais
+Procure por `SEU_EMAIL_AQUI` e troque pelo seu email real!
