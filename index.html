@@ -851,14 +851,11 @@
   <script>
     // Dados dos produtos
     const produtos = [
-      { id: 1, nome: "Camisa Time 1", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.45.jpeg", preco: 149.90 },
-      { id: 2, nome: "Camisa Time 2", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.45 (1).jpeg", preco: 149.90 },
-      { id: 3, nome: "Camisa Time 3", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.45 (2).jpeg", preco: 149.90 },
-      { id: 4, nome: "Camisa Time 4", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.46.jpeg", preco: 149.90 },
-      { id: 5, nome: "Camisa Time 5", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.47.jpeg", preco: 149.90 },
-      { id: 6, nome: "Camisa Time 6", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.48.jpeg", preco: 149.90 },
-      { id: 7, nome: "Camisa Time 7", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.50 (1).jpeg", preco: 149.90 },
-      { id: 8, nome: "Camisa Time 8", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.50 (2).jpeg", preco: 149.90 }
+      { id: 1, nome: "Camisa de Time Oficial do Brasil", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.45.jpeg", preco: 149.90 },
+      { id: 3, nome: "Camisa de Time Oficial do Brasil", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.45 (2).jpeg", preco: 149.90 },
+      { id: 4, nome: "Camisa de Time Oficial do Brasil", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.46.jpeg", preco: 149.90 },
+      { id: 6, nome: "Camisa de Time Oficial do Brasil - Feminina", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.48.jpeg", preco: 149.90, feminina: true },
+      { id: 7, nome: "Camisa de Time Oficial do Brasil", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.50 (1).jpeg", preco: 149.90 }
     ];
 
     // Carrinho
@@ -873,8 +870,9 @@
             <div class="produto-img">
               <img src="${p.img}" alt="${p.nome}">
             </div>
-            <div style="position: absolute; top: 10px; right: 10px; background: #dc2626; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem;">
-              🔥 PROMO
+            <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end;">
+              ${p.feminina ? '<div style="background: #ec4899; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem;">👩 Feminina</div>' : ''}
+              <div style="background: #dc2626; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem;">🔥 PROMO</div>
             </div>
           </div>
           <div class="produto-info">
