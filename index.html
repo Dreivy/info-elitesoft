@@ -2189,10 +2189,23 @@
         const valorFinal = subtotal - desconto;
 
         // Montar lista de itens para o Stripe
-        const lineItems = dados.itens.map(item => ({
-          price: item.stripePriceId,
-          quantity: item.quantidade
-        }));
+        const lineItems = dados.itens.map(item => {
+          // Buscar stripePriceId do produto original se não estiver no carrinho
+          const produtoOriginal = produtos.find(p => p.id === item.id);
+          return {
+            price: item.stripePriceId || produtoOriginal?.stripePriceId,
+            quantity: item.quantidade
+          };
+        });
+
+        // Validar que todos os items têm price
+        const itemsSemPrice = lineItems.filter(item => !item.price);
+        if (itemsSemPrice.length > 0) {
+          alert('❌ Erro: Alguns produtos não têm preço configurado no Stripe. Tente novamente.');
+          return;
+        }
+
+        console.log('📦 Line Items para Stripe:', lineItems);
 
         // Criar sessão no Stripe via backend
         const response = await fetch('https://futstore-backend.onrender.com/create-checkout-session', {
