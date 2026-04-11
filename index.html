@@ -27,8 +27,29 @@
   <!-- Favicon SVG inline -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
   
+  <!-- Cache Control Meta Tags -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
   <!-- Stripe.js -->
   <script src="https://js.stripe.com/v3/"></script>
+  
+  <!-- Force Cache Clear -->
+  <script>
+    // Clear all caches on load
+    if ('caches' in window) {
+      caches.keys().then(names => names.forEach(name => caches.delete(name)));
+    }
+    // Force reload if this is an old cached version
+    const appVersion = '2.0.0';
+    const storedVersion = localStorage.getItem('appVersion');
+    if (storedVersion !== appVersion) {
+      localStorage.clear();
+      localStorage.setItem('appVersion', appVersion);
+      location.reload(true);
+    }
+  </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
