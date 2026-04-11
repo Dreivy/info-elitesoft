@@ -1870,8 +1870,27 @@
       { id: 19, nome: "Milan I 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.54.jpeg", preco: 119.90, stripePriceId: "price_1TL9uy0ulMXRLJVE63NlmtwF" }
     ];
 
-    // Carrinho
-    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+    // Carrinho - limpar se for versão antiga sem stripePriceId
+    let carrinhoRaw = JSON.parse(localStorage.getItem('carrinho')) || [];
+    let carrinho = [];
+    
+    // Verificar se carrinho tem stripePriceId (versão nova)
+    if (carrinhoRaw.length > 0 && carrinhoRaw[0].stripePriceId) {
+      carrinho = carrinhoRaw;
+    } else if (carrinhoRaw.length > 0) {
+      // Migrar carrinho antigo adicionando stripePriceId
+      carrinho = carrinhoRaw.map(item => {
+        const produto = produtos.find(p => p.id === item.id);
+        return {
+          ...item,
+          stripePriceId: produto?.stripePriceId
+        };
+      }).filter(item => item.stripePriceId); // Remover items sem priceId
+      
+      // Salvar carrinho migrado
+      localStorage.setItem('carrinho', JSON.stringify(carrinho));
+      console.log('🔄 Carrinho migrado para nova versão');
+    }
 
     // Renderizar produtos
     function renderizarProdutos() {
