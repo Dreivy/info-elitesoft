@@ -469,8 +469,21 @@
 
   <!-- Banner Frete Grátis -->
   <div class="frete-banner">
-    🚚 FRETE GRÁTIS PARA TODO O BRASIL! 🇧
+    🚚 FRETE GRÁTIS PARA TODO O BRASIL! | 🔥 PROMOÇÃO: 3 CAMISAS POR R$ 99! 🔥
   </div>
+
+  <!-- Banner Promoção -->
+  <section class="promo-banner" style="background: linear-gradient(135deg, #dc2626 0%, #f59e0b 100%); color: white; text-align: center; padding: 40px 20px;">
+    <div class="container">
+      <div style="font-size: 3rem; margin-bottom: 10px;">🔥</div>
+      <h2 style="font-size: 2.5rem; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">PROMOÇÃO IMPERDÍVEL!</h2>
+      <p style="font-size: 1.5rem; margin-bottom: 10px;">Leve <strong>3 CAMISAS</strong> por apenas</p>
+      <div style="font-size: 4rem; font-weight: bold; margin: 20px 0; text-shadow: 3px 3px 6px rgba(0,0,0,0.3);">R$ 99,00</div>
+      <p style="font-size: 1.1rem; opacity: 0.9;">De <span style="text-decoration: line-through;">R$ 449,70</span> por apenas R$ 99,00!</p>
+      <p style="font-size: 0.9rem; margin-top: 15px; opacity: 0.8;">🚚 Frete grátis incluso | ⚡ Estoque limitado</p>
+      <a href="#produtos" class="btn" style="margin-top: 20px; font-size: 1.2rem; padding: 18px 40px;">🛒 APROVEITAR AGORA</a>
+    </div>
+  </section>
 
   <!-- Hero -->
   <section class="hero" id="inicio">
@@ -856,13 +869,24 @@
       const grid = document.getElementById('produtosGrid');
       grid.innerHTML = produtos.map(p => `
         <div class="produto-card">
-          <div class="produto-img">
-            <img src="${p.img}" alt="${p.nome}">
+          <div style="position: relative;">
+            <div class="produto-img">
+              <img src="${p.img}" alt="${p.nome}">
+            </div>
+            <div style="position: absolute; top: 10px; right: 10px; background: #dc2626; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem;">
+              🔥 PROMO
+            </div>
           </div>
           <div class="produto-info">
             <h3>${p.nome}</h3>
             <p>Camisa oficial de time de futebol. Qualidade premium.</p>
-            <div class="produto-preco">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+              <div class="produto-preco" style="margin: 0;">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
+              <span style="background: #dc2626; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">-78%</span>
+            </div>
+            <div style="background: #fef3c7; padding: 8px; border-radius: 6px; margin-bottom: 10px; text-align: center;">
+              <span style="color: #dc2626; font-weight: bold; font-size: 0.9rem;">🔥 3 por R$ 99,00!</span>
+            </div>
             <div class="frete-gratis">🚚 FRETE GRÁTIS</div>
             
             <div class="tamanho-selector">
@@ -966,6 +990,18 @@
       }
 
       const subtotal = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+      const totalItens = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
+      
+      // Aplicar promoção: 3 camisas por R$ 99
+      let desconto = 0;
+      let precoFinal = subtotal;
+      
+      if (totalItens >= 3) {
+        const gruposDe3 = Math.floor(totalItens / 3);
+        const valorNormal3Camisas = 149.90 * 3;
+        desconto = gruposDe3 * (valorNormal3Camisas - 99);
+        precoFinal = subtotal - desconto;
+      }
 
       lista.innerHTML = carrinho.map((item, index) => `
         <div class="carrinho-item">
@@ -985,14 +1021,29 @@
             <span>Subtotal:</span>
             <span>R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
           </div>
+          ${desconto > 0 ? `
+          <div class="carrinho-total-row" style="color: #dc2626;">
+            <span>🔥 Desconto Promoção (3 por R$99):</span>
+            <span>- R$ ${desconto.toFixed(2).replace('.', ',')}</span>
+          </div>
+          ` : ''}
           <div class="carrinho-total-row">
             <span>Frete:</span>
             <span class="frete-gratis-carrinho">GRÁTIS </span>
           </div>
           <div class="carrinho-total-row total">
             <span>Total:</span>
-            <span>R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+            <span>R$ ${precoFinal.toFixed(2).replace('.', ',')}</span>
           </div>
+          ${desconto > 0 ? `
+          <div style="background: #fef3c7; padding: 10px; border-radius: 8px; margin-top: 10px; text-align: center;">
+            <span style="color: #dc2626; font-weight: bold; font-size: 0.9rem;">🎉 Você economizou R$ ${desconto.toFixed(2).replace('.', ',')}!</span>
+          </div>
+          ` : totalItens > 0 ? `
+          <div style="background: #fef3c7; padding: 10px; border-radius: 8px; margin-top: 10px; text-align: center;">
+            <span style="color: #dc2626; font-weight: bold; font-size: 0.85rem;">🔥 Adicione mais ${3 - totalItens} camisa(s) para ganhar o desconto!</span>
+          </div>
+          ` : ''}
         </div>
       `;
 
