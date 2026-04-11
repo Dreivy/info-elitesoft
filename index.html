@@ -436,6 +436,45 @@
       transition: transform 0.3s;
     }
     .whatsapp-float:hover { transform: scale(1.1); }
+    /* Modal Produto */
+    .modal-produto-content {
+      background: white;
+      width: 90%;
+      max-width: 900px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 20px;
+      position: relative;
+      padding: 30px;
+    }
+    .modal-produto-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    .modal-produto-img {
+      border-radius: 15px;
+      overflow: hidden;
+      height: 400px;
+    }
+    .modal-produto-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .modal-produto-info h2 {
+      color: var(--secondary);
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+    .modal-produto-desc {
+      color: var(--gray);
+      line-height: 1.8;
+    }
+    @media (max-width: 768px) {
+      .modal-produto-body { grid-template-columns: 1fr; }
+      .modal-produto-img { height: 250px; }
+    }
     /* Responsive */
     @media (max-width: 768px) {
       .hero h1 { font-size: 1.8rem; }
@@ -729,6 +768,71 @@
   <!-- WhatsApp Float -->
   <a href="https://wa.me/5511999999999" class="whatsapp-float" target="_blank">💬</a>
 
+  <!-- Modal de Produto -->
+  <div class="modal-overlay" id="modalProduto" onclick="fecharModalProduto(event)">
+    <div class="modal-produto-content" onclick="event.stopPropagation()">
+      <button class="fechar-modal" onclick="fecharModalProduto()">✕</button>
+      <div class="modal-produto-body">
+        <div class="modal-produto-img">
+          <img id="modalProdutoImg" src="" alt="">
+        </div>
+        <div class="modal-produto-info">
+          <h2 id="modalProdutoNome"></h2>
+          <p class="modal-produto-desc">Camisa oficial de time de futebol. Tecido de alta qualidade com tecnologia de secagem rápida. Costura reforçada e acabamento premium.</p>
+          
+          <div style="display: flex; align-items: center; gap: 15px; margin: 20px 0;">
+            <div class="produto-preco" style="font-size: 2rem; margin: 0;" id="modalProdutoPreco"></div>
+            <span style="background: #dc2626; color: white; padding: 5px 12px; border-radius: 4px; font-weight: bold;">-78%</span>
+          </div>
+          
+          <div style="background: #fef3c7; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <span style="color: #dc2626; font-weight: bold;">🔥 PROMOÇÃO: 3 camisas por R$ 99,00!</span>
+          </div>
+          
+          <div style="background: #f0fdf4; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <span style="color: var(--primary); font-weight: bold;">🚚 FRETE GRÁTIS para todo Brasil!</span>
+          </div>
+
+          <div class="tamanho-selector">
+            <label>Tamanho:</label>
+            <div class="tamanho-options" id="modalTamanhos">
+              <button class="tamanho-btn" onclick="selecionarTamanhoModal('P', this)">P</button>
+              <button class="tamanho-btn" onclick="selecionarTamanhoModal('M', this)">M</button>
+              <button class="tamanho-btn" onclick="selecionarTamanhoModal('G', this)">G</button>
+              <button class="tamanho-btn" onclick="selecionarTamanhoModal('GG', this)">GG</button>
+              <button class="tamanho-btn" onclick="selecionarTamanhoModal('XG', this)">XG</button>
+            </div>
+          </div>
+          
+          <div class="quantidade-selector">
+            <label>Quantidade:</label>
+            <div class="quantidade-controls">
+              <button class="quantidade-btn" onclick="alterarQuantidadeModal(-1)">-</button>
+              <input type="number" class="quantidade-input" id="modalQtd" value="1" min="1" max="10" readonly>
+              <button class="quantidade-btn" onclick="alterarQuantidadeModal(1)">+</button>
+            </div>
+          </div>
+          
+          <button class="btn-adicionar" style="padding: 15px; font-size: 1.1rem;" onclick="adicionarDoModal()">
+            🛒 Adicionar ao Carrinho
+          </button>
+          
+          <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+            <h4 style="margin-bottom: 10px; color: var(--secondary);">📋 Detalhes do Produto:</h4>
+            <ul style="color: var(--gray); font-size: 0.9rem; line-height: 2; padding-left: 20px;">
+              <li>Material: Poliéster de alta qualidade</li>
+              <li>Tecnologia de secagem rápida</li>
+              <li>Costura reforçada</li>
+              <li>Escudo bordado</li>
+              <li>Produto original com nota fiscal</li>
+              <li>Garantia de 90 dias</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Carrinho Modal -->
   <div class="modal-overlay" id="carrinhoModal">
     <div class="carrinho-modal">
@@ -866,13 +970,16 @@
       const grid = document.getElementById('produtosGrid');
       grid.innerHTML = produtos.map(p => `
         <div class="produto-card">
-          <div style="position: relative;">
+          <div style="position: relative; cursor: pointer;" onclick="abrirModalProduto(${p.id})">
             <div class="produto-img">
               <img src="${p.img}" alt="${p.nome}">
             </div>
             <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end;">
               ${p.feminina ? '<div style="background: #ec4899; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem;">👩 Feminina</div>' : ''}
               <div style="background: #dc2626; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem;">🔥 PROMO</div>
+            </div>
+            <div style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; padding: 8px 15px; border-radius: 8px; font-size: 0.85rem; display: flex; align-items: center; gap: 5px;">
+              🔍 Ver detalhes
             </div>
           </div>
           <div class="produto-info">
@@ -1128,6 +1235,79 @@
     // Inicializar
     renderizarProdutos();
     atualizarCarrinho();
+
+    // Modal de Produto
+    let produtoModalAtual = null;
+    let tamanhoModalSelecionado = 'M';
+
+    function abrirModalProduto(produtoId) {
+      const produto = produtos.find(p => p.id === produtoId);
+      if (!produto) return;
+
+      produtoModalAtual = produto;
+      tamanhoModalSelecionado = 'M';
+
+      document.getElementById('modalProdutoImg').src = produto.img;
+      document.getElementById('modalProdutoImg').alt = produto.nome;
+      document.getElementById('modalProdutoNome').textContent = produto.nome;
+      document.getElementById('modalProdutoPreco').textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
+      document.getElementById('modalQtd').value = 1;
+
+      // Reset tamanhos
+      document.querySelectorAll('#modalTamanhos .tamanho-btn').forEach(btn => {
+        btn.classList.remove('selected');
+        if (btn.textContent === 'M') btn.classList.add('selected');
+      });
+
+      document.getElementById('modalProduto').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function fecharModalProduto(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById('modalProduto').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function selecionarTamanhoModal(tamanho, btn) {
+      tamanhoModalSelecionado = tamanho;
+      document.querySelectorAll('#modalTamanhos .tamanho-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+
+    function alterarQuantidadeModal(delta) {
+      const input = document.getElementById('modalQtd');
+      let valor = parseInt(input.value) + delta;
+      if (valor < 1) valor = 1;
+      if (valor > 10) valor = 10;
+      input.value = valor;
+    }
+
+    function adicionarDoModal() {
+      if (!produtoModalAtual) return;
+
+      const quantidade = parseInt(document.getElementById('modalQtd').value);
+
+      const itemExistente = carrinho.find(item => item.id === produtoModalAtual.id && item.tamanho === tamanhoModalSelecionado);
+      
+      if (itemExistente) {
+        itemExistente.quantidade += quantidade;
+      } else {
+        carrinho.push({
+          id: produtoModalAtual.id,
+          nome: produtoModalAtual.nome,
+          img: produtoModalAtual.img,
+          preco: produtoModalAtual.preco,
+          tamanho: tamanhoModalSelecionado,
+          quantidade: quantidade
+        });
+      }
+
+      salvarCarrinho();
+      atualizarCarrinho();
+      fecharModalProduto();
+      toggleCarrinho();
+    }
   </script>
 </body>
 </html>
