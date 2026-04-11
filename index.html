@@ -981,7 +981,13 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
+    // Inicializar EmailJS (substitua com sua chave pública do EmailJS)
+    (function() {
+      // Registre-se em https://www.emailjs.com para obter sua chave pública
+      emailjs.init("SUA_CHAVE_PUBLICA_AQUI");
+    })();
     // Dados dos produtos
     const produtos = [
       { id: 1, nome: "Camisa de Time Oficial do Brasil", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.45.jpeg", preco: 149.90 },
@@ -1257,8 +1263,47 @@
       salvarCarrinho();
       atualizarCarrinho();
       toggleCarrinho();
-      
-      alert('Pedido realizado com sucesso! Você será redirecionado para o pagamento.');
+
+      alert('✅ Pedido realizado com sucesso!\n\n📧 Um email de confirmação foi enviado para ' + dados.email + '\n\nVocê será redirecionado para o pagamento.');
+    }
+
+    // Enviar email de confirmação
+    function enviarEmailConfirmacao(dados) {
+      const listaItens = dados.itens.map(item => 
+        `- ${item.nome} (Tamanho: ${item.tamanho}, Qtd: ${item.quantidade}) - R$ ${(item.preco * item.quantidade).toFixed(2)}`
+      ).join('\n');
+
+      const templateParams = {
+        to_name: dados.nome,
+        to_email: dados.email,
+        pedido_numero: 'FUT-' + Date.now().toString().slice(-6),
+        data_pedido: new Date().toLocaleDateString('pt-BR'),
+        itens_pedido: listaItens,
+        total_pedido: `R$ ${dados.total.toFixed(2).replace('.', ',')}`,
+        nome_cliente: dados.nome,
+        email_cliente: dados.email,
+        telefone_cliente: dados.telefone,
+        cpf_cliente: dados.cpf,
+        endereco_completo: `${dados.endereco.logradouro}, ${dados.endereco.numero} ${dados.endereco.complemento ? '- ' + dados.endereco.complemento : ''}\n${dados.endereco.bairro} - ${dados.endereco.cidade}/${dados.endereco.estado}\nCEP: ${dados.endereco.cep}`,
+        frete: 'GRÁTIS',
+        reply_to: 'contato@futstore.com.br'
+      };
+
+      // Enviar email para o cliente
+      emailjs.send('service_futstore', 'template_confirmacao_cliente', templateParams)
+        .then(function(response) {
+          console.log('Email enviado com sucesso!', response.status, response.text);
+        }, function(error) {
+          console.log('Erro ao enviar email:', error);
+        });
+
+      // Enviar email de notificação para o dono da loja
+      emailjs.send('service_futstore', 'template_novo_pedido_loja', templateParams)
+        .then(function(response) {
+          console.log('Notificação enviada para a loja!', response.status, response.text);
+        }, function(error) {
+          console.log('Erro ao enviar notificação:', error);
+        });
     }
 
     // Inicializar
