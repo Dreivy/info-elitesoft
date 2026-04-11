@@ -2187,14 +2187,28 @@
 
         const valorFinal = subtotal - desconto;
 
-        // Usar Payment Link do Stripe com valor customizado
-        // Stripe Payment Link: https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00
-        // Vamos redirecionar com o valor correto via URL
-        const stripeUrl = `https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00?prefilled_email=${encodeURIComponent(dados.email)}&client_reference_id=FUT-${Date.now()}`;
+        // Gerar link de pagamento dinâmico usando Stripe Payment Link
+        // Você precisa criar um Payment Link no Stripe Dashboard com "Customer chooses price"
+        // ou usar a API para criar sessões dinâmicas
         
-        // Mostrar modal de confirmação antes de redirecionar
-        if (confirm(`✅ Pedido confirmado!\n\n💰 Total: R$ ${valorFinal.toFixed(2).replace('.', ',')}\n\nVocê será redirecionado para o pagamento seguro do Stripe.`)) {
-          window.open(stripeUrl, '_blank');
+        // Opção 1: Usar Payment Link fixo (valor será digitado pelo cliente)
+        const paymentLink = 'https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00';
+        
+        // Mostrar confirmação com valor correto antes de redirecionar
+        const itensList = dados.itens.map(i => `• ${i.nome} (${i.tamanho}) x${i.quantidade}`).join('\n');
+        
+        const confirmar = confirm(
+          `📋 RESUMO DO PEDIDO\n\n` +
+          `🛒 Itens:\n${itensList}\n\n` +
+          `💰 Total: R$ ${valorFinal.toFixed(2).replace('.', ',')}\n` +
+          `${desconto > 0 ? `🎉 Desconto: -R$ ${desconto.toFixed(2).replace('.', ',')}\n` : ''}` +
+          `🚚 Frete: GRÁTIS\n\n` +
+          `Você será redirecionado para o pagamento seguro.\n` +
+          `⚠️ IMPORTANTE: Digite o valor EXATO de R$ ${valorFinal.toFixed(2).replace('.', ',')} no campo de valor.`
+        );
+
+        if (confirmar) {
+          window.open(paymentLink, '_blank');
         }
       } catch (error) {
         console.error('Erro:', error);
