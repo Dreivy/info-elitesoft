@@ -4,9 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="FutStore - Camisas de time de futebol originais. Frete grátis para todo Brasil!">
+  <meta name="keywords" content="camisa de time, futebol, futebol shirt, frete grátis, original">
+  <meta name="author" content="FutStore">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://futstore.com.br/">
+  <meta property="og:title" content="FutStore - Camisas de Time de Futebol | Frete Grátis">
+  <meta property="og:description" content="As melhores camisas de futebol dos maiores times do mundo. Frete grátis para todo Brasil!">
+  <meta property="og:image" content="https://futstore.com.br/og-image.jpg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://futstore.com.br/">
+  <meta property="twitter:title" content="FutStore - Camisas de Time de Futebol | Frete Grátis">
+  <meta property="twitter:description" content="As melhores camisas de futebol dos maiores times do mundo. Frete grátis para todo Brasil!">
+  <meta property="twitter:image" content="https://futstore.com.br/og-image.jpg">
+
   <title>FutStore - Camisas de Time de Futebol | Frete Grátis</title>
+  
+  <!-- Favicon SVG inline -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     :root {
       --primary: #16a34a;
       --primary-dark: #15803d;
@@ -20,6 +42,15 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #334155;
       line-height: 1.6;
+    }
+    /* Focus styles para acessibilidade */
+    *:focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+    }
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
     }
     /* Header */
     header {
@@ -525,9 +556,9 @@
           <li><a href="#faq">FAQ</a></li>
           <li><a href="#contato">Contato</a></li>
           <li>
-            <div class="cart-icon" onclick="toggleCarrinho()">
+            <div class="cart-icon" onclick="toggleCarrinho()" role="button" aria-label="Abrir carrinho de compras" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')toggleCarrinho()">
               🛒
-              <span class="cart-count" id="cartCount">0</span>
+              <span class="cart-count" id="cartCount" aria-hidden="true">0</span>
             </div>
           </li>
         </ul>
@@ -816,7 +847,10 @@
   </footer>
 
   <!-- WhatsApp Float -->
-  <a href="https://wa.me/5511999999999" class="whatsapp-float" target="_blank">💬</a>
+  <a href="https://wa.me/5511999999999" class="whatsapp-float" target="_blank" aria-label="Contato via WhatsApp">💬</a>
+
+  <!-- Botão Voltar ao Topo -->
+  <button id="btnVoltarTopo" class="btn-voltar-topo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Voltar ao topo" style="display: none; position: fixed; bottom: 90px; right: 20px; width: 50px; height: 50px; background: var(--secondary); color: white; border: none; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 998; transition: transform 0.3s, background 0.3s;" onmouseover="this.style.background='var(--primary)'" onmouseout="this.style.background='var(--secondary)'">↑</button>
 
   <!-- Modal de Produto -->
   <div class="modal-overlay" id="modalProduto" onclick="fecharModalProduto(event)">
@@ -914,21 +948,21 @@
             </div>
             <div class="form-group">
               <label>Telefone *</label>
-              <input type="tel" id="telefone" required placeholder="(11) 99999-9999">
+              <input type="tel" id="telefone" required placeholder="(11) 99999-9999" maxlength="15" oninput="mascaraTelefone(this)">
             </div>
           </div>
           <div class="form-group">
             <label>CPF *</label>
-            <input type="text" id="cpf" required placeholder="000.000.000-00">
+            <input type="text" id="cpf" required placeholder="000.000.000-00" maxlength="14" oninput="mascaraCPF(this)">
           </div>
           
           <h4 style="margin: 20px 0 15px; color: var(--secondary);">📍 Endereço de Entrega</h4>
           
           <div class="form-group cep-container">
             <label>CEP *</label>
-            <input type="text" id="cep" required placeholder="00000-000" maxlength="9">
-            <button type="button" class="btn-buscar-cep" onclick="buscarCep()">Buscar</button>
-            <div class="loading-cep" id="loadingCep">Buscando endereço...</div>
+            <input type="text" id="cep" required placeholder="00000-000" maxlength="9" oninput="mascaraCEP(this)" aria-label="CEP para entrega">
+            <button type="button" class="btn-buscar-cep" onclick="buscarCep()" aria-label="Buscar endereço pelo CEP">Buscar</button>
+            <div class="loading-cep" id="loadingCep" role="status" aria-live="polite">Buscando endereço...</div>
           </div>
           
           <div class="form-group">
@@ -1008,11 +1042,25 @@
     const EMAIL_LOJA = "dreivy23@gmail.com"; // <-- Email da loja
     // Dados dos produtos
     const produtos = [
-      { id: 1, nome: "Camisa de Time Oficial do Brasil", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.45.jpeg", preco: 149.90 },
-      { id: 3, nome: "Camisa de Time Oficial do Brasil", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.45 (2).jpeg", preco: 149.90 },
-      { id: 4, nome: "Camisa de Time Oficial do Brasil", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.46.jpeg", preco: 149.90 },
-      { id: 6, nome: "Camisa de Time Oficial do Brasil - Feminina", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.48.jpeg", preco: 149.90, feminina: true },
-      { id: 7, nome: "Camisa de Time Oficial do Brasil", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.50 (1).jpeg", preco: 149.90 }
+      { id: 1, nome: "Flamengo I 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.45.jpeg", preco: 149.90 },
+      { id: 2, nome: "Flamengo II 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.45 (1).jpeg", preco: 149.90 },
+      { id: 3, nome: "Flamengo III 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.45 (2).jpeg", preco: 149.90 },
+      { id: 4, nome: "Real Madrid I 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.46.jpeg", preco: 149.90 },
+      { id: 5, nome: "Real Madrid II 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.47.jpeg", preco: 149.90 },
+      { id: 6, nome: "Barcelona I 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.48.jpeg", preco: 149.90, feminina: true },
+      { id: 7, nome: "Barcelona II 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.50 (1).jpeg", preco: 149.90 },
+      { id: 8, nome: "Manchester City I 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.50 (2).jpeg", preco: 149.90 },
+      { id: 9, nome: "Manchester City II 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.51 (1).jpeg", preco: 149.90 },
+      { id: 10, nome: "Paris Saint-Germain I 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.51 (2).jpeg", preco: 149.90 },
+      { id: 11, nome: "Paris Saint-Germain II 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.51 (3).jpeg", preco: 149.90 },
+      { id: 12, nome: "Seleção Brasil I 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.51.jpeg", preco: 149.90 },
+      { id: 13, nome: "Seleção Brasil II 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.52 (1).jpeg", preco: 149.90 },
+      { id: 14, nome: "Liverpool I 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.52 (2).jpeg", preco: 149.90 },
+      { id: 15, nome: "Liverpool II 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.52.jpeg", preco: 149.90 },
+      { id: 16, nome: "Bayern de Munique I 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.53 (1).jpeg", preco: 149.90 },
+      { id: 17, nome: "Bayern de Munique II 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.53 (2).jpeg", preco: 149.90 },
+      { id: 18, nome: "Juventus I 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.53.jpeg", preco: 149.90 },
+      { id: 19, nome: "Milan I 2025/26", img: "imagens/WhatsApp Image 2026-04-10 at 23.46.54.jpeg", preco: 149.90 }
     ];
 
     // Carrinho
@@ -1048,26 +1096,26 @@
             <div class="frete-gratis">🚚 FRETE GRÁTIS</div>
             
             <div class="tamanho-selector">
-              <label>Tamanho:</label>
-              <div class="tamanho-options" id="tamanhos-${p.id}">
-                <button class="tamanho-btn" onclick="selecionarTamanho(${p.id}, 'P', this)">P</button>
-                <button class="tamanho-btn" onclick="selecionarTamanho(${p.id}, 'M', this)">M</button>
-                <button class="tamanho-btn" onclick="selecionarTamanho(${p.id}, 'G', this)">G</button>
-                <button class="tamanho-btn" onclick="selecionarTamanho(${p.id}, 'GG', this)">GG</button>
-                <button class="tamanho-btn" onclick="selecionarTamanho(${p.id}, 'XG', this)">XG</button>
+              <label id="tamanhos-label-${p.id}">Tamanho:</label>
+              <div class="tamanho-options" id="tamanhos-${p.id}" role="group" aria-labelledby="tamanhos-label-${p.id}">
+                <button class="tamanho-btn" onclick="selecionarTamanho(${p.id}, 'P', this)" aria-label="Tamanho P" role="radio">P</button>
+                <button class="tamanho-btn" onclick="selecionarTamanho(${p.id}, 'M', this)" aria-label="Tamanho M" role="radio">M</button>
+                <button class="tamanho-btn" onclick="selecionarTamanho(${p.id}, 'G', this)" aria-label="Tamanho G" role="radio">G</button>
+                <button class="tamanho-btn" onclick="selecionarTamanho(${p.id}, 'GG', this)" aria-label="Tamanho GG" role="radio">GG</button>
+                <button class="tamanho-btn" onclick="selecionarTamanho(${p.id}, 'XG', this)" aria-label="Tamanho XG" role="radio">XG</button>
               </div>
             </div>
-            
+
             <div class="quantidade-selector">
-              <label>Quantidade:</label>
+              <label for="qtd-${p.id}">Quantidade:</label>
               <div class="quantidade-controls">
-                <button class="quantidade-btn" onclick="alterarQuantidade(${p.id}, -1)">-</button>
-                <input type="number" class="quantidade-input" id="qtd-${p.id}" value="1" min="1" max="10" readonly>
-                <button class="quantidade-btn" onclick="alterarQuantidade(${p.id}, 1)">+</button>
+                <button class="quantidade-btn" onclick="alterarQuantidade(${p.id}, -1)" aria-label="Diminuir quantidade">-</button>
+                <input type="number" class="quantidade-input" id="qtd-${p.id}" value="1" min="1" max="10" readonly aria-label="Quantidade desejada">
+                <button class="quantidade-btn" onclick="alterarQuantidade(${p.id}, 1)" aria-label="Aumentar quantidade">+</button>
               </div>
             </div>
-            
-            <button class="btn-adicionar" onclick="adicionarAoCarrinho(${p.id})">
+
+            <button class="btn-adicionar" onclick="adicionarAoCarrinho(${p.id})" aria-label="Adicionar ${p.nome} ao carrinho">
               🛒 Adicionar ao Carrinho
             </button>
           </div>
@@ -1216,19 +1264,21 @@
     async function buscarCep() {
       const cep = document.getElementById('cep').value.replace(/\D/g, '');
       if (cep.length !== 8) {
-        alert('CEP inválido!');
+        alert('CEP inválido! Digite 8 dígitos.');
         return;
       }
 
       const loading = document.getElementById('loadingCep');
       loading.style.display = 'block';
+      loading.textContent = 'Buscando endereço...';
 
       try {
         const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
         const data = await response.json();
 
         if (data.erro) {
-          alert('CEP não encontrado!');
+          alert('CEP não encontrado! Verifique o número digitado.');
+          loading.style.display = 'none';
           return;
         }
 
@@ -1236,11 +1286,15 @@
         document.getElementById('bairro').value = data.bairro || '';
         document.getElementById('cidade').value = data.localidade || '';
         document.getElementById('estado').value = data.uf || '';
-        
+
+        loading.textContent = 'Endereço encontrado!';
+        setTimeout(() => {
+          loading.style.display = 'none';
+        }, 2000);
+
         document.getElementById('numero').focus();
       } catch (error) {
         alert('Erro ao buscar CEP. Preencha manualmente.');
-      } finally {
         loading.style.display = 'none';
       }
     }
@@ -1254,7 +1308,7 @@
     // Finalizar compra
     function finalizarCompra(event) {
       event.preventDefault();
-      
+
       const dados = {
         nome: document.getElementById('nome').value,
         email: document.getElementById('email').value,
@@ -1273,9 +1327,12 @@
         total: carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0)
       };
 
+      // Enviar email de confirmação
+      enviarEmailConfirmacao(dados);
+
       // Redirecionar para Stripe
       window.open('https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00', '_blank');
-      
+
       // Limpar carrinho
       carrinho = [];
       salvarCarrinho();
@@ -1283,6 +1340,28 @@
       toggleCarrinho();
 
       alert('✅ Pedido realizado com sucesso!\n\n📧 Um email de confirmação foi enviado para ' + dados.email + '\n\nVocê será redirecionado para o pagamento.');
+    }
+
+    // Máscaras de input
+    function mascaraCPF(input) {
+      let v = input.value.replace(/\D/g, '');
+      v = v.replace(/(\d{3})(\d)/, '$1.$2');
+      v = v.replace(/(\d{3})(\d)/, '$1.$2');
+      v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+      input.value = v;
+    }
+
+    function mascaraTelefone(input) {
+      let v = input.value.replace(/\D/g, '');
+      v = v.replace(/^(\d{2})(\d)/, '($1) $2');
+      v = v.replace(/(\d{5})(\d)/, '$1-$2');
+      input.value = v;
+    }
+
+    function mascaraCEP(input) {
+      let v = input.value.replace(/\D/g, '');
+      v = v.replace(/(\d{5})(\d)/, '$1-$2');
+      input.value = v;
     }
 
     // Enviar email de confirmação para o CLIENTE (com cópia pra loja)
@@ -1326,6 +1405,29 @@
     renderizarProdutos();
     atualizarCarrinho();
     iniciarTimerPromocao();
+
+    // Botão voltar ao topo
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('btnVoltarTopo');
+      if (window.scrollY > 300) {
+        btn.style.display = 'flex';
+        btn.style.alignItems = 'center';
+        btn.style.justifyContent = 'center';
+      } else {
+        btn.style.display = 'none';
+      }
+    });
+
+    // Fechar modais com tecla ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        fecharModalProduto();
+        const carrinhoModal = document.getElementById('carrinhoModal');
+        if (carrinhoModal.classList.contains('active')) {
+          toggleCarrinho();
+        }
+      }
+    });
 
     // Timer de Promoção (2 horas de urgência)
     function iniciarTimerPromocao() {
