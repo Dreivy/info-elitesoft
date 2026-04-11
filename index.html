@@ -2224,50 +2224,25 @@
 
         const valorFinal = subtotal - desconto;
 
-        // Montar lista de itens para o Stripe - BUSCAR SEMPRE do produto original
-        const lineItems = dados.itens.map(item => {
-          const produtoOriginal = produtos.find(p => p.id === item.id);
-          const priceId = produtoOriginal?.stripePriceId;
-          
-          console.log('🔍 Item:', item.nome, '| Price ID:', priceId);
-          
-          if (!priceId) {
-            console.error('❌ ERRO: Produto sem stripePriceId!', item);
-          }
-          
-          return {
-            price: priceId,
-            quantity: item.quantidade
-          };
-        });
+        // SOLUÇÃO: Usar Stripe Payment Link direto (sem backend)
+        // Mostra resumo completo e redireciona para Payment Link do Stripe
+        
+        const itensList = dados.itens.map(i => `• ${i.nome} (${i.tamanho}) x${i.quantidade} = R$ ${(i.preco * i.quantidade).toFixed(2)}`).join('\n');
+        
+        const confirmar = confirm(
+          `📋 RESUMO DO PEDIDO\n\n` +
+          `🛒 Itens:\n${itensList}\n\n` +
+          `💰 Total: R$ ${valorFinal.toFixed(2).replace('.', ',')}\n` +
+          `${desconto > 0 ? `🎉 Desconto: -R$ ${desconto.toFixed(2).replace('.', ',')}\n` : ''}` +
+          `🚚 Frete: GRÁTIS\n\n` +
+          `✅ Confirmar pedido e ir para pagamento?`
+        );
 
-        console.log('📦 Line Items finais:', JSON.stringify(lineItems, null, 2));
-
-        // Validar que todos os items têm price
-        const itemsSemPrice = lineItems.filter(item => !item.price);
-        if (itemsSemPrice.length > 0) {
-          console.error('❌ Items sem price:', itemsSemPrice);
-          alert('❌ Erro: Produtos sem configuração Stripe. Tente novamente.');
-          return;
-        }
-
-        // Criar sessão no Stripe via backend
-        const response = await fetch('https://futstore-backend.onrender.com/create-checkout-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            customerEmail: dados.email,
-            customerName: dados.nome,
-            lineItems: lineItems
-          })
-        });
-
-        const session = await response.json();
-
-        if (session.url) {
-          window.location.href = session.url;
+        if (confirmar) {
+          // Stripe Payment Link configurado para aceitar valor customizado
+          window.location.href = 'https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00';
         } else {
-          alert('❌ Erro ao criar pagamento: ' + (session.error || 'Tente novamente.'));
+          return;
         }
       } catch (error) {
         console.error('Erro:', error);
