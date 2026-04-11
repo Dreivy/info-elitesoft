@@ -1874,22 +1874,18 @@
     let carrinhoRaw = JSON.parse(localStorage.getItem('carrinho')) || [];
     let carrinho = [];
     
-    // Verificar se carrinho tem stripePriceId (versão nova)
-    if (carrinhoRaw.length > 0 && carrinhoRaw[0].stripePriceId) {
-      carrinho = carrinhoRaw;
-    } else if (carrinhoRaw.length > 0) {
-      // Migrar carrinho antigo adicionando stripePriceId
+    // SEMPRE migrar carrinho para garantir stripePriceId
+    if (carrinhoRaw.length > 0) {
       carrinho = carrinhoRaw.map(item => {
         const produto = produtos.find(p => p.id === item.id);
         return {
           ...item,
-          stripePriceId: produto?.stripePriceId
+          stripePriceId: item.stripePriceId || produto?.stripePriceId
         };
-      }).filter(item => item.stripePriceId); // Remover items sem priceId
+      }).filter(item => item.stripePriceId);
       
-      // Salvar carrinho migrado
       localStorage.setItem('carrinho', JSON.stringify(carrinho));
-      console.log('🔄 Carrinho migrado para nova versão');
+      console.log('🔄 Carrinho carregado e migrado:', carrinho.length, 'itens');
     }
 
     // Renderizar produtos
@@ -2207,17 +2203,12 @@
 
         const valorFinal = subtotal - desconto;
 
-        console.log('🔍 DEBUG - Dados do pedido:', dados);
-        console.log('🔍 DEBUG - Itens do carrinho:', dados.itens);
-        console.log('🔍 DEBUG - Lista de produtos:', produtos);
-        
-        // Montar lista de itens para o Stripe
+        // Montar lista de itens para o Stripe - BUSCAR SEMPRE do produto original
         const lineItems = dados.itens.map(item => {
-          // Buscar stripePriceId do produto original se não estiver no carrinho
           const produtoOriginal = produtos.find(p => p.id === item.id);
-          console.log('🔍 DEBUG - Item:', item.nome, '| stripePriceId do carrinho:', item.stripePriceId, '| stripePriceId do produto:', produtoOriginal?.stripePriceId);
+          const priceId = produtoOriginal?.stripePriceId;
           
-          const priceId = item.stripePriceId || produtoOriginal?.stripePriceId;
+          console.log('🔍 Item:', item.nome, '| Price ID:', priceId);
           
           if (!priceId) {
             console.error('❌ ERRO: Produto sem stripePriceId!', item);
@@ -2229,13 +2220,13 @@
           };
         });
 
-        console.log('📦 DEBUG - Line Items finais:', JSON.stringify(lineItems, null, 2));
+        console.log('📦 Line Items finais:', JSON.stringify(lineItems, null, 2));
 
         // Validar que todos os items têm price
         const itemsSemPrice = lineItems.filter(item => !item.price);
         if (itemsSemPrice.length > 0) {
           console.error('❌ Items sem price:', itemsSemPrice);
-          alert('❌ Erro: Produtos sem configuração Stripe. Recarregue a página e tente novamente.');
+          alert('❌ Erro: Produtos sem configuração Stripe. Tente novamente.');
           return;
         }
 
