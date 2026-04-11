@@ -110,6 +110,76 @@
       color: var(--gray);
       font-size: 1.1rem;
     }
+    /* Compra Destaque */
+    .compra-destaque {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+    .compra-destaque .section-title h2,
+    .compra-destaque .section-title p {
+      color: white;
+    }
+    .produto-compra {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .produto-compra-img {
+      font-size: 6rem;
+    }
+    .produto-compra-info {
+      text-align: left;
+    }
+    .produto-compra-info h3 {
+      color: var(--secondary);
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    .produto-compra-info p {
+      color: var(--gray);
+      margin-bottom: 15px;
+    }
+    .produto-compra-preco {
+      margin: 20px 0;
+    }
+    .preco-antigo {
+      text-decoration: line-through;
+      color: #94a3b8;
+      font-size: 1.2rem;
+      margin-right: 10px;
+    }
+    .preco-atual {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #10b981;
+    }
+    .btn-comprar {
+      display: inline-block;
+      padding: 15px 40px;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .btn-comprar:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+    }
+    .seguranca {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-top: 15px;
+    }
     /* Serviços */
     .servicos { background: var(--light); }
     .servicos-grid {
@@ -278,6 +348,7 @@
       <nav>
         <ul>
           <li><a href="#inicio">Início</a></li>
+          <li><a href="#compra">Comprar</a></li>
           <li><a href="#servicos">Serviços</a></li>
           <li><a href="#produtos">Produtos</a></li>
           <li><a href="#sobre">Sobre</a></li>
@@ -331,6 +402,31 @@
           <div class="servico-icon">☁️</div>
           <h3>Cloud e Backup</h3>
           <p>Soluções em nuvem e backup de dados para proteger suas informações.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Produto para Compra -->
+  <section class="compra-destaque" id="compra">
+    <div class="container">
+      <div class="section-title">
+        <h2>🛒 Produto para Teste</h2>
+        <p>Experimente nosso sistema de pagamento - apenas R$ 1,00!</p>
+      </div>
+      <div class="produto-compra">
+        <div class="produto-compra-img">🎁</div>
+        <div class="produto-compra-info">
+          <h3>Pacote Digital Teste</h3>
+          <p>Produto digital para teste de pagamento. Entrega instantânea via e-mail.</p>
+          <div class="produto-compra-preco">
+            <span class="preco-antigo">R$ 5,00</span>
+            <span class="preco-atual">R$ 1,00</span>
+          </div>
+          <a href="https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00" target="_blank" class="btn-comprar">
+            💳 Comprar Agora
+          </a>
+          <p class="seguranca">🔒 Pagamento seguro via Stripe</p>
         </div>
       </div>
     </div>
