@@ -2224,8 +2224,8 @@
 
         const valorFinal = subtotal - desconto;
 
-        // SOLUÇÃO: Usar Stripe Payment Link direto (sem backend)
-        // Mostra resumo completo e redireciona para Payment Link do Stripe
+        // SOLUÇÃO: Criar sessão Stripe direto no frontend com Stripe.js
+        // Mostra resumo completo e cria checkout com valor correto
         
         const itensList = dados.itens.map(i => `• ${i.nome} (${i.tamanho}) x${i.quantidade} = R$ ${(i.preco * i.quantidade).toFixed(2)}`).join('\n');
         
@@ -2238,11 +2238,44 @@
           `✅ Confirmar pedido e ir para pagamento?`
         );
 
-        if (confirmar) {
-          // Stripe Payment Link configurado para aceitar valor customizado
-          window.location.href = 'https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00';
-        } else {
+        if (!confirmar) {
           return;
+        }
+
+        // Criar sessão Stripe direto no frontend
+        const stripe = Stripe('pk_test_51TKoGq0ulMXRLJVEgC9ye1sqISUFKqBAmfWtrDWaVs28A6wSI5ToWIkMzbhVWw5LTzsGOPYsSzGHA7ESoZMMrUee00Igefq9gj');
+        
+        // Criar line items para Stripe
+        const lineItems = dados.itens.map(item => {
+          const produtoOriginal = produtos.find(p => p.id === item.id);
+          return {
+            price_data: {
+              currency: 'brl',
+              product_data: {
+                name: item.nome,
+                description: `Tamanho: ${item.tamanho}`,
+              },
+              unit_amount: Math.round(item.preco * 100),
+            },
+            quantity: item.quantidade,
+          };
+        });
+
+        try {
+          const { error } = await stripe.redirectToCheckout({
+            mode: 'payment',
+            lineItems: lineItems,
+            customerEmail: dados.email,
+            successUrl: 'https://dreivy.github.io/info-elitesoft/?payment=success',
+            cancelUrl: 'https://dreivy.github.io/info-elitesoft/?payment=cancelled',
+          });
+
+          if (error) {
+            alert('❌ Erro no pagamento: ' + error.message);
+          }
+        } catch (err) {
+          console.error('Erro:', err);
+          alert('Erro ao processar pagamento. Tente novamente.');
         }
       } catch (error) {
         console.error('Erro:', error);
