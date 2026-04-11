@@ -220,12 +220,21 @@
     }
     .produto-card:hover { transform: translateY(-5px); }
     .produto-img {
-      height: 180px;
+      height: 250px;
       background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 4rem;
+      overflow: hidden;
+    }
+    .produto-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .produto-card:hover .produto-img img {
+      transform: scale(1.05);
     }
     .produto-info {
       padding: 25px;
@@ -441,35 +450,67 @@
       </div>
       <div class="produtos-grid">
         <div class="produto-card">
-          <div class="produto-img">🔴⚫</div>
+          <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.45.jpeg" alt="Camisa 1"></div>
           <div class="produto-info">
-            <h3>Flamengo Home 2025</h3>
-            <p>Camisa oficial Flamengo I 2025/26. Adidas, tecido Dri-FIT.</p>
-            <div class="produto-preco">R$ 349,90</div>
+            <h3>Camisa Time 1</h3>
+            <p>Camisa oficial de time de futebol. Qualidade premium.</p>
+            <div class="produto-preco">R$ 149,90</div>
           </div>
         </div>
         <div class="produto-card">
-          <div class="produto-img">⚪🟣</div>
+          <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.45 (1).jpeg" alt="Camisa 2"></div>
           <div class="produto-info">
-            <h3>Real Madrid Home 2025</h3>
-            <p>Camisa oficial Real Madrid I 2025/26. Adidas, tecnologia AEROREADY.</p>
-            <div class="produto-preco">R$ 399,90</div>
+            <h3>Camisa Time 2</h3>
+            <p>Camisa oficial de time de futebol. Qualidade premium.</p>
+            <div class="produto-preco">R$ 149,90</div>
           </div>
         </div>
         <div class="produto-card">
-          <div class="produto-img">🔵🔴</div>
+          <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.45 (2).jpeg" alt="Camisa 3"></div>
           <div class="produto-info">
-            <h3>Barcelona Home 2025</h3>
-            <p>Camisa oficial Barcelona I 2025/26. Nike, tecido Dri-FIT ADV.</p>
-            <div class="produto-preco">R$ 389,90</div>
+            <h3>Camisa Time 3</h3>
+            <p>Camisa oficial de time de futebol. Qualidade premium.</p>
+            <div class="produto-preco">R$ 149,90</div>
           </div>
         </div>
         <div class="produto-card">
-          <div class="produto-img">🔴</div>
+          <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.46.jpeg" alt="Camisa 4"></div>
           <div class="produto-info">
-            <h3>Manchester United Home 2025</h3>
-            <p>Camisa oficial Man United I 2025/26. Adidas, tecido AEROREADY.</p>
-            <div class="produto-preco">R$ 379,90</div>
+            <h3>Camisa Time 4</h3>
+            <p>Camisa oficial de time de futebol. Qualidade premium.</p>
+            <div class="produto-preco">R$ 149,90</div>
+          </div>
+        </div>
+        <div class="produto-card">
+          <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.47.jpeg" alt="Camisa 5"></div>
+          <div class="produto-info">
+            <h3>Camisa Time 5</h3>
+            <p>Camisa oficial de time de futebol. Qualidade premium.</p>
+            <div class="produto-preco">R$ 149,90</div>
+          </div>
+        </div>
+        <div class="produto-card">
+          <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.48.jpeg" alt="Camisa 6"></div>
+          <div class="produto-info">
+            <h3>Camisa Time 6</h3>
+            <p>Camisa oficial de time de futebol. Qualidade premium.</p>
+            <div class="produto-preco">R$ 149,90</div>
+          </div>
+        </div>
+        <div class="produto-card">
+          <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.50 (1).jpeg" alt="Camisa 7"></div>
+          <div class="produto-info">
+            <h3>Camisa Time 7</h3>
+            <p>Camisa oficial de time de futebol. Qualidade premium.</p>
+            <div class="produto-preco">R$ 149,90</div>
+          </div>
+        </div>
+        <div class="produto-card">
+          <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.50 (2).jpeg" alt="Camisa 8"></div>
+          <div class="produto-info">
+            <h3>Camisa Time 8</h3>
+            <p>Camisa oficial de time de futebol. Qualidade premium.</p>
+            <div class="produto-preco">R$ 149,90</div>
           </div>
         </div>
       </div>
