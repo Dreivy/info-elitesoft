@@ -216,9 +216,34 @@
       border-radius: 15px;
       overflow: hidden;
       box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-      transition: transform 0.3s;
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      cursor: pointer;
     }
-    .produto-card:hover { transform: translateY(-5px); }
+    .produto-card:hover { 
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+    .produto-link:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+    .btn-comprar-card {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 25px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.95rem;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .produto-card:hover .btn-comprar-card {
+      transform: scale(1.05);
+    }
     .produto-img {
       height: 250px;
       background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
@@ -449,70 +474,78 @@
         <p>As mais vendidas da temporada 2025/2026</p>
       </div>
       <div class="produtos-grid">
-        <div class="produto-card">
+        <a href="https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00" target="_blank" class="produto-card produto-link">
           <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.45.jpeg" alt="Camisa 1"></div>
           <div class="produto-info">
             <h3>Camisa Time 1</h3>
             <p>Camisa oficial de time de futebol. Qualidade premium.</p>
             <div class="produto-preco">R$ 149,90</div>
+            <div class="btn-comprar-card">💳 Comprar</div>
           </div>
-        </div>
-        <div class="produto-card">
+        </a>
+        <a href="https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00" target="_blank" class="produto-card produto-link">
           <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.45 (1).jpeg" alt="Camisa 2"></div>
           <div class="produto-info">
             <h3>Camisa Time 2</h3>
             <p>Camisa oficial de time de futebol. Qualidade premium.</p>
             <div class="produto-preco">R$ 149,90</div>
+            <div class="btn-comprar-card">💳 Comprar</div>
           </div>
-        </div>
-        <div class="produto-card">
+        </a>
+        <a href="https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00" target="_blank" class="produto-card produto-link">
           <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.45 (2).jpeg" alt="Camisa 3"></div>
           <div class="produto-info">
             <h3>Camisa Time 3</h3>
             <p>Camisa oficial de time de futebol. Qualidade premium.</p>
             <div class="produto-preco">R$ 149,90</div>
+            <div class="btn-comprar-card">💳 Comprar</div>
           </div>
-        </div>
-        <div class="produto-card">
+        </a>
+        <a href="https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00" target="_blank" class="produto-card produto-link">
           <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.46.jpeg" alt="Camisa 4"></div>
           <div class="produto-info">
             <h3>Camisa Time 4</h3>
             <p>Camisa oficial de time de futebol. Qualidade premium.</p>
             <div class="produto-preco">R$ 149,90</div>
+            <div class="btn-comprar-card">💳 Comprar</div>
           </div>
-        </div>
-        <div class="produto-card">
+        </a>
+        <a href="https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00" target="_blank" class="produto-card produto-link">
           <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.47.jpeg" alt="Camisa 5"></div>
           <div class="produto-info">
             <h3>Camisa Time 5</h3>
             <p>Camisa oficial de time de futebol. Qualidade premium.</p>
             <div class="produto-preco">R$ 149,90</div>
+            <div class="btn-comprar-card">💳 Comprar</div>
           </div>
-        </div>
-        <div class="produto-card">
+        </a>
+        <a href="https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00" target="_blank" class="produto-card produto-link">
           <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.48.jpeg" alt="Camisa 6"></div>
           <div class="produto-info">
             <h3>Camisa Time 6</h3>
             <p>Camisa oficial de time de futebol. Qualidade premium.</p>
             <div class="produto-preco">R$ 149,90</div>
+            <div class="btn-comprar-card">💳 Comprar</div>
           </div>
-        </div>
-        <div class="produto-card">
+        </a>
+        <a href="https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00" target="_blank" class="produto-card produto-link">
           <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.50 (1).jpeg" alt="Camisa 7"></div>
           <div class="produto-info">
             <h3>Camisa Time 7</h3>
             <p>Camisa oficial de time de futebol. Qualidade premium.</p>
             <div class="produto-preco">R$ 149,90</div>
+            <div class="btn-comprar-card">💳 Comprar</div>
           </div>
-        </div>
-        <div class="produto-card">
+        </a>
+        <a href="https://buy.stripe.com/test_28E9AL6gic67amoe5G2Ji00" target="_blank" class="produto-card produto-link">
           <div class="produto-img"><img src="imagens/WhatsApp Image 2026-04-10 at 23.46.50 (2).jpeg" alt="Camisa 8"></div>
           <div class="produto-info">
             <h3>Camisa Time 8</h3>
             <p>Camisa oficial de time de futebol. Qualidade premium.</p>
             <div class="produto-preco">R$ 149,90</div>
+            <div class="btn-comprar-card">💳 Comprar</div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </section>
