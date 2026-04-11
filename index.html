@@ -548,6 +548,27 @@
       <p style="font-size: 1.5rem; margin-bottom: 10px;">Leve <strong>3 CAMISAS</strong> por apenas</p>
       <div style="font-size: 4rem; font-weight: bold; margin: 20px 0; text-shadow: 3px 3px 6px rgba(0,0,0,0.3);">R$ 99,00</div>
       <p style="font-size: 1.1rem; opacity: 0.9;">De <span style="text-decoration: line-through;">R$ 449,70</span> por apenas R$ 99,00!</p>
+      
+      <!-- Timer de Urgência -->
+      <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; margin: 25px auto; max-width: 500px; backdrop-filter: blur(10px);">
+        <p style="font-size: 1.1rem; margin-bottom: 15px; font-weight: bold;">⏰ ESTA PROMOÇÃO ACABA EM:</p>
+        <div id="promoTimer" style="display: flex; justify-content: center; gap: 15px;">
+          <div style="background: white; color: #dc2626; padding: 15px; border-radius: 10px; min-width: 70px;">
+            <div id="timerHoras" style="font-size: 2rem; font-weight: bold;">02</div>
+            <div style="font-size: 0.8rem; text-transform: uppercase;">Horas</div>
+          </div>
+          <div style="background: white; color: #dc2626; padding: 15px; border-radius: 10px; min-width: 70px;">
+            <div id="timerMinutos" style="font-size: 2rem; font-weight: bold;">00</div>
+            <div style="font-size: 0.8rem; text-transform: uppercase;">Min</div>
+          </div>
+          <div style="background: white; color: #dc2626; padding: 15px; border-radius: 10px; min-width: 70px;">
+            <div id="timerSegundos" style="font-size: 2rem; font-weight: bold;">00</div>
+            <div style="font-size: 0.8rem; text-transform: uppercase;">Seg</div>
+          </div>
+        </div>
+        <p style="font-size: 0.9rem; margin-top: 15px; opacity: 0.9;">⚡ Aproveite antes que acabe!</p>
+      </div>
+      
       <p style="font-size: 0.9rem; margin-top: 15px; opacity: 0.8;">🚚 Frete grátis incluso | ⚡ Estoque limitado</p>
       <a href="#produtos" class="btn" style="margin-top: 20px; font-size: 1.2rem; padding: 18px 40px;">🛒 APROVEITAR AGORA</a>
     </div>
@@ -1304,6 +1325,47 @@
     // Inicializar
     renderizarProdutos();
     atualizarCarrinho();
+    iniciarTimerPromocao();
+
+    // Timer de Promoção (2 horas de urgência)
+    function iniciarTimerPromocao() {
+      // Verifica se já existe um timer salvo
+      let tempoRestante = localStorage.getItem('promoTimer');
+      
+      if (!tempoRestante) {
+        // Primeira vez: define 2 horas (7200 segundos)
+        tempoRestante = 7200;
+        localStorage.setItem('promoTimer', tempoRestante);
+      } else {
+        tempoRestante = parseInt(tempoRestante);
+      }
+
+      function atualizarDisplay() {
+        const horas = Math.floor(tempoRestante / 3600);
+        const minutos = Math.floor((tempoRestante % 3600) / 60);
+        const segundos = tempoRestante % 60;
+
+        document.getElementById('timerHoras').textContent = String(horas).padStart(2, '0');
+        document.getElementById('timerMinutos').textContent = String(minutos).padStart(2, '0');
+        document.getElementById('timerSegundos').textContent = String(segundos).padStart(2, '0');
+
+        // Quando acabar, reinicia com 2 horas
+        if (tempoRestante <= 0) {
+          tempoRestante = 7200;
+          localStorage.setItem('promoTimer', tempoRestante);
+        }
+      }
+
+      // Atualiza a cada segundo
+      setInterval(() => {
+        tempoRestante--;
+        localStorage.setItem('promoTimer', tempoRestante);
+        atualizarDisplay();
+      }, 1000);
+
+      // Mostra imediatamente
+      atualizarDisplay();
+    }
 
     // Modal de Produto
     let produtoModalAtual = null;
