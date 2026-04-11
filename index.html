@@ -2245,21 +2245,21 @@
         // Criar sessão Stripe direto no frontend
         const stripe = Stripe('pk_test_51TKoGq0ulMXRLJVEgC9ye1sqISUFKqBAmfWtrDWaVs28A6wSI5ToWIkMzbhVWw5LTzsGOPYsSzGHA7ESoZMMrUee00Igefq9gj');
         
-        // Criar line items para Stripe
+        // Criar line items para Stripe usando Price IDs
         const lineItems = dados.itens.map(item => {
           const produtoOriginal = produtos.find(p => p.id === item.id);
           return {
-            price_data: {
-              currency: 'brl',
-              product_data: {
-                name: item.nome,
-                description: `Tamanho: ${item.tamanho}`,
-              },
-              unit_amount: Math.round(item.preco * 100),
-            },
+            price: produtoOriginal?.stripePriceId,
             quantity: item.quantidade,
           };
         });
+
+        // Validar que todos os items têm price ID
+        const itemsSemPrice = lineItems.filter(item => !item.price);
+        if (itemsSemPrice.length > 0) {
+          alert('❌ Erro: Produtos sem configuração Stripe. Tente novamente.');
+          return;
+        }
 
         try {
           const { error } = await stripe.redirectToCheckout({
