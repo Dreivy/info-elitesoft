@@ -990,7 +990,6 @@
       }
 
       const subtotal = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
-      const totalItens = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
       
       // Aplicar promoção: 3 camisas por R$ 99
       let desconto = 0;
