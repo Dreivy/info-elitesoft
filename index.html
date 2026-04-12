@@ -2259,8 +2259,8 @@
         }
 
         try {
-          // Chamar backend Render para criar sessão
-          const response = await fetch('https://futstore-backend.onrender.com/create-checkout-session', {
+          // Chamar backend para criar sessão (usando servidor local para teste)
+          const response = await fetch('http://localhost:3000/create-checkout-session', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
