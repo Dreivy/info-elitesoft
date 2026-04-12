@@ -2171,9 +2171,6 @@
         total: carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0)
       };
 
-      // Enviar email de confirmação
-      enviarEmailConfirmacao(dados);
-
       // Criar sessão de pagamento no Stripe com valor correto
       criarPagamentoStripe(dados);
 
@@ -2273,6 +2270,8 @@
           const session = await response.json();
 
           if (session.url) {
+            // Salvar dados do pedido para enviar email após pagamento
+            localStorage.setItem('pendingOrder', JSON.stringify(dados));
             window.location.href = session.url;
           } else {
             alert('❌ Erro ao criar pagamento: ' + (session.error || 'Tente novamente.'));
@@ -2328,6 +2327,22 @@
     renderizarProdutos();
     atualizarCarrinho();
     iniciarTimerPromocao();
+
+    // Verificar se há pagamento pendente (após retorno do Stripe)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('payment') === 'success') {
+      const pendingOrder = JSON.parse(localStorage.getItem('pendingOrder'));
+      if (pendingOrder) {
+        // Enviar email de confirmação APÓS pagamento
+        enviarEmailConfirmacao(pendingOrder);
+        localStorage.removeItem('pendingOrder');
+        
+        // Mostrar mensagem de sucesso
+        setTimeout(() => {
+          alert('✅ Pagamento recebido com sucesso!\n\n📧 Um email de confirmação foi enviado para ' + pendingOrder.email);
+        }, 1000);
+      }
+    }
 
     // Botão voltar ao topo
     window.addEventListener('scroll', () => {
