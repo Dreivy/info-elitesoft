@@ -42,7 +42,7 @@
       caches.keys().then(names => names.forEach(name => caches.delete(name)));
     }
     // Force reload if this is an old cached version
-    const appVersion = '2.1.0';
+    const appVersion = '2.2.0';
     const storedVersion = localStorage.getItem('appVersion');
     if (storedVersion !== appVersion) {
       localStorage.clear();
