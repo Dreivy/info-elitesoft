@@ -2250,14 +2250,14 @@
               customerName: dados.nome,
               total: valorFinal, // Valor com desconto aplicado
               description: `Pedido FutStore - ${dados.itens.map(i => `${i.nome} (${i.tamanho}) x${i.quantidade}`).join(', ')}`,
-              lineItems: [
-                {
+              priceData: {
+                unit_amount: Math.round(valorFinal * 100),
+                currency: 'brl',
+                product_data: {
                   name: 'Pedido FutStore',
-                  amount: Math.round(valorFinal * 100), // Stripe espera em centavos, usa valor COM desconto
-                  quantity: 1,
                   description: dados.itens.map(i => `${i.nome} (${i.tamanho}) x${i.quantidade}`).join(', ')
                 }
-              ]
+              }
             })
           });
 
