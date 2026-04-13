@@ -2044,12 +2044,12 @@
       // Aplicar promoção: 3 camisas por R$ 99
       let desconto = 0;
       let precoFinal = subtotal;
-      
+
       if (totalItens >= 3) {
         const gruposDe3 = Math.floor(totalItens / 3);
-        const valorNormal3Camisas = 149.90 * 3;
-        desconto = gruposDe3 * (valorNormal3Camisas - 99);
-        precoFinal = subtotal - desconto;
+        // Desconto = valor que excede R$ 99 por grupo de 3
+        desconto = gruposDe3 * (subtotal - 99);
+        precoFinal = 99; // Para cada grupo de 3, paga R$ 99
       }
 
       lista.innerHTML = carrinho.map((item, index) => `
@@ -2212,14 +2212,14 @@
         const totalItens = dados.itens.reduce((sum, item) => sum + item.quantidade, 0);
         let subtotal = dados.itens.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
         let desconto = 0;
+        let valorFinal = subtotal;
 
         if (totalItens >= 3) {
           const gruposDe3 = Math.floor(totalItens / 3);
-          const valorNormal3Camisas = 149.90 * 3;
-          desconto = gruposDe3 * (valorNormal3Camisas - 99);
+          // Desconto = valor que excede R$ 99 por grupo de 3
+          desconto = gruposDe3 * (subtotal - 99);
+          valorFinal = 99; // Para cada grupo de 3, paga R$ 99
         }
-
-        const valorFinal = subtotal - desconto;
 
         // SOLUÇÃO: Usar backend Render para criar sessão Stripe
         // Mostra resumo completo e cria checkout com valor correto via backend
