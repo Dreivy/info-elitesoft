@@ -2248,16 +2248,16 @@
             body: JSON.stringify({
               customerEmail: dados.email,
               customerName: dados.nome,
-              total: valorFinal, // Valor com desconto aplicado
+              total: valorFinal,
               description: `Pedido FutStore - ${dados.itens.map(i => `${i.nome} (${i.tamanho}) x${i.quantidade}`).join(', ')}`,
-              priceData: {
-                unit_amount: Math.round(valorFinal * 100),
-                currency: 'brl',
-                product_data: {
-                  name: 'Pedido FutStore',
-                  description: dados.itens.map(i => `${i.nome} (${i.tamanho}) x${i.quantidade}`).join(', ')
-                }
-              }
+              lineItems: [{
+                price_data: {
+                  unit_amount: Math.round(valorFinal * 100),
+                  currency: 'brl',
+                  product_data: { name: 'Pedido FutStore' }
+                },
+                quantity: 1
+              }]
             })
           });
 
