@@ -2254,7 +2254,7 @@
                 name: item.nome,
                 amount: Math.round(item.preco * 100), // Stripe espera em centavos
                 quantity: item.quantidade,
-                stripePriceId: item.stripePriceId
+                price: item.stripePriceId // Stripe espera o campo "price"
               }))
             })
           });
