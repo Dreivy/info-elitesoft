@@ -1,73 +1,52 @@
 # 🚧 CHECKPOINT - FutStore Pagamento
 
-**Data:** 14/04/2026 - 01:00
-**Status:** Correções aplicadas, aguardando deploy do backend no Render
+**Data:** 14/04/2026
+**Status:** ✅ Frontend corrigido e deployado | ⏳ Backend aguardando deploy no Render
 
 ---
 
-## ✅ Correções Aplicadas
+## 📍 ONDE PARAMOS
 
-### 1. Cálculo de Desconto no Carrinho (`index.html` - `atualizarCarrinho()`)
+- ✅ Frontend corrigido e no ar: https://dreivy.github.io/info-elitesoft
+- ❌ Backend Stripe offline (404 no Render)
+- ⏳ **PRÓXIMO:** Deploy do backend no Render
 
-**ANTES (BUG):**
+---
+
+## ✅ O QUE FOI CORRIGIDO
+
+### 1. Cálculo de Desconto no Carrinho
+**Arquivo:** `index.html` → função `atualizarCarrinho()`
+
+**BUG ANTERIOR:**
 ```javascript
-if (totalItens >= 3) {
-  const gruposDe3 = Math.floor(totalItens / 3);
-  desconto = gruposDe3 * (subtotal - 99);  // ❌ Usava subtotal total
-  precoFinal = 99;  // ❌ Sempre 99, ignorava grupos extras
-}
+desconto = gruposDe3 * (subtotal - 99);  // ❌ errado
+precoFinal = 99;  // ❌ sempre 99
 ```
 
-**DEPOIS (CORRIGIDO):**
+**CORREÇÃO:**
 ```javascript
-if (totalItens >= 3) {
-  const gruposDe3 = Math.floor(totalItens / 3);
-  const itensRestantes = totalItens % 3;
-  const precoMedio = subtotal / totalItens;
-  
-  const valorGrupos = gruposDe3 * 99;
-  const valorRestantes = itensRestantes * precoMedio;
-  precoFinal = valorGrupos + valorRestantes;  // ✅ Correto
-  desconto = subtotal - precoFinal;
-}
+const gruposDe3 = Math.floor(totalItens / 3);
+const itensRestantes = totalItens % 3;
+const precoMedio = subtotal / totalItens;
+precoFinal = gruposDe3 * 99 + itensRestantes * precoMedio;
+desconto = subtotal - precoFinal;
 ```
 
-### 2. Cálculo de Desconto no Pagamento (`index.html` - `criarPagamentoStripe()`)
-✅ Já corrigido anteriormente (gruposDe3 * 99 + itensRestantes * precoMedio)
+### 2. Cálculo de Desconto no Pagamento Stripe
+**Arquivo:** `index.html` → função `criarPagamentoStripe()`
+✅ Mesma correção aplicada
 
-### 3. Backend (`server.js`)
-✅ Recriado com logs de debug e validação defensiva
-
-### 4. Arquivos Deployados no GitHub
-- ✅ `index.html` - Correção do desconto no carrinho
-- ✅ `backend/server.js` - Backend corrigido
-- ✅ `backend/DEPLOY.md` - Guia de deploy
-- ✅ `render.yaml` - Configuração do Render
-- ✅ `CHECKPOINT.md` - Este arquivo
+### 3. Backend Recriado
+**Arquivo:** `backend/server.js`
+- ✅ Logs de debug (📥🔍✅❌)
+- ✅ Validação defensiva
+- ✅ Fallbacks para campos opcionais
 
 ---
 
-## ❌ Problemas Identificados nos Testes
+## 📊 TABELA DE DESCONTO (CORRETA)
 
-| # | Problema | Status |
-|---|----------|--------|
-| 1 | Desconto não aplicado no carrinho (mostrava subtotal sem desconto) | ✅ Corrigido |
-| 2 | `precoFinal = 99` fixo (ignorava grupos extras) | ✅ Corrigido |
-| 3 | Backend retornando 404 no Render | ⏳ Aguardando deploy |
-| 4 | Mensagem "Adicione mais 1 camisa" aparecendo mesmo com 3+ itens | ✅ Corrigido |
-
----
-
-## 🧪 Resultados dos Testes
-
-### Teste Realizado:
-1. ✅ Site carrega corretamente (18 produtos)
-2. ✅ Carrinho abre e mostra itens
-3. ✅ Formulário de checkout preenchido
-4. ✅ Botão "Finalizar Compra" funciona
-5. ❌ Backend Stripe offline (404)
-
-### Cálculo de Desconto (CORRIGIDO):
 | Itens | Subtotal | Valor Final | Desconto |
 |-------|----------|-------------|----------|
 | 1 | R$ 149,90 | R$ 149,90 | R$ 0 |
@@ -78,50 +57,83 @@ if (totalItens >= 3) {
 
 ---
 
-## 🚀 PRÓXIMO PASSO: Deploy do Backend no Render
+## 🔐 CREDENCIAIS
 
-### Opção A: Usar render.yaml (Automático)
-
-1. Acesse: https://dashboard.render.com
-2. Clique em **New** → **Blueprint**
-3. Conecte ao repositório: `Dreivy/info-elitesoft`
-4. O Render lerá o `render.yaml` automaticamente
-5. Adicione a variável `STRIPE_SECRET_KEY` no dashboard
-6. Clique em **Apply**
-
-### Opção B: Criar Web Service Manual
-
-1. Acesse: https://dashboard.render.com
-2. Clique em **New** → **Web Service**
-3. Conecte ao repositório: `Dreivy/info-elitesoft`
-4. Configure:
-   - **Root Directory**: `backend`
-   - **Build Command**: `npm install`
-   - **Start Command**: `node server.js`
-5. Em **Environment Variables**:
-   - `STRIPE_SECRET_KEY`: sua chave do Stripe
-   - `FRONTEND_URL`: `https://dreivy.github.io`
-6. Clique em **Create Web Service**
+| Serviço | Login | Senha |
+|---------|-------|-------|
+| GitHub | dreivy.stellport@gmail.com | @Acdc814818 |
+| Stripe | (ver dashboard) | - |
+| Render | (mesmo GitHub) | - |
 
 ---
 
-## 📋 Checklist Final
+## 🚀 COMO CONTINUAR
 
-- [x] Correção do cálculo de desconto no carrinho
-- [x] Correção do cálculo de desconto no pagamento
-- [x] Backend server.js recriado
-- [x] Deploy no GitHub Pages
-- [ ] **Deploy do backend no Render** ← PRÓXIMO PASSO
-- [ ] Testar fluxo completo de pagamento
-- [ ] Verificar redirecionamento para Stripe
-- [ ] Confirmar valor correto no checkout Stripe
+### Passo 1: Deploy do Backend no Render
+
+**Opção A - Blueprint (automático):**
+1. Acesse: https://dashboard.render.com
+2. **New** → **Blueprint**
+3. Conecte: `Dreivy/info-elitesoft`
+4. O `render.yaml` será lido automaticamente
+5. Adicione `STRIPE_SECRET_KEY` nas env vars
+6. **Apply**
+
+**Opção B - Manual:**
+1. **New** → **Web Service**
+2. Repositório: `Dreivy/info-elitesoft`
+3. Root Directory: `backend`
+4. Build: `npm install`
+5. Start: `node server.js`
+6. Env Vars: `STRIPE_SECRET_KEY`, `FRONTEND_URL=https://dreivy.github.io`
+
+### Passo 2: Testar Fluxo Completo
+
+1. Acesse: https://dreivy.github.io/info-elitesoft
+2. Adicione 3 itens ao carrinho
+3. Verifique total = R$ 99,00
+4. Preencha checkout → Finalizar
+5. Deve redirecionar para Stripe
+
+### Passo 3: Verificar Backend
+
+```bash
+# Testar health check
+curl https://futstore-backend.onrender.com/health
+
+# Deve retornar: {"status":"ok","timestamp":"..."}
+```
 
 ---
 
-## 🔗 Links
+## 📁 ARQUIVOS IMPORTANTES
+
+| Arquivo | Descrição |
+|---------|-----------|
+| `index.html` | Frontend principal (corrigido) |
+| `backend/server.js` | Backend Stripe (recriado) |
+| `backend/package.json` | Dependências do backend |
+| `render.yaml` | Config auto-deploy Render |
+| `deploy-fix.js` | Script Playwright deploy |
+| `test-site.js` | Script Playwright testes |
+| `CHECKPOINT.md` | Este arquivo |
+
+---
+
+## 🔗 LINKS
 
 - Site: https://dreivy.github.io/info-elitesoft
 - Backend: https://futstore-backend.onrender.com
-- Render Dashboard: https://dashboard.render.com
-- Stripe Dashboard: https://dashboard.stripe.com
-- Repositório: https://github.com/Dreivy/info-elitesoft
+- Render: https://dashboard.render.com
+- Stripe: https://dashboard.stripe.com
+- GitHub: https://github.com/Dreivy/info-elitesoft
+
+---
+
+## 📝 NOTAS
+
+- Playwright instalado em `node_modules/`
+- Scripts: `deploy-fix.js` (deploy), `test-site.js` (testes)
+- Promoção: 3 camisas por R$ 99,00
+- Backend precisa de `STRIPE_SECRET_KEY` no Render
+- Frontend já está corrigido e funcionando
