@@ -2214,11 +2214,19 @@
         let desconto = 0;
         let valorFinal = subtotal;
 
+        // PROMOÇÃO: Cada grupo de 3 itens = R$ 99,00
+        // Itens que não completam grupo de 3 = preço normal
         if (totalItens >= 3) {
           const gruposDe3 = Math.floor(totalItens / 3);
-          // Desconto = valor que excede R$ 99 por grupo de 3
-          desconto = gruposDe3 * (subtotal - 99);
-          valorFinal = 99; // Para cada grupo de 3, paga R$ 99
+          const itensRestantes = totalItens % 3;
+          
+          // Preço médio por item (para calcular o valor dos grupos de 3)
+          const precoMedio = subtotal / totalItens;
+          const valorGrupos = gruposDe3 * 99;
+          const valorRestantes = itensRestantes * precoMedio;
+          
+          valorFinal = valorGrupos + valorRestantes;
+          desconto = subtotal - valorFinal;
         }
 
         // SOLUÇÃO: Usar backend Render para criar sessão Stripe
@@ -2242,23 +2250,58 @@
         // SOLUÇÃO: Enviar valor total calculado (com desconto) para o backend
         // O backend criará um único item com o valor correto
         try {
+          // Construir lineItems discriminando cada produto
+          const lineItems = dados.itens.map(item => ({
+            price_data: {
+              unit_amount: Math.round(item.preco * 100),
+              currency: 'brl',
+              product_data: {
+                name: `${item.nome} (${item.tamanho})`,
+                description: `Camisa de Futebol - FutStore`
+              }
+            },
+            quantity: item.quantidade
+          }));
+
+          // Se há desconto (3+ itens), ajustar valores proporcionalmente
+          if (desconto > 0) {
+            const fatorDesconto = valorFinal / subtotal;
+            lineItems.forEach(item => {
+              item.price_data.unit_amount = Math.round(item.price_data.unit_amount * fatorDesconto);
+            });
+          }
+
+          // Se só tem 1 lineItem ajustado, simplificar (compatibilidade com backend)
+          const payload = lineItems.length === 1 ? {
+            customerEmail: dados.email,
+            customerName: dados.nome,
+            total: valorFinal,
+            description: `Pedido FutStore - ${dados.itens.map(i => `${i.nome} (${i.tamanho}) x${i.quantidade}`).join(', ')}`,
+            lineItems: [{
+              price_data: {
+                unit_amount: Math.round(valorFinal * 100),
+                currency: 'brl',
+                product_data: { 
+                  name: 'Pedido FutStore',
+                  description: payload.description
+                }
+              },
+              quantity: 1
+            }]
+          } : {
+            customerEmail: dados.email,
+            customerName: dados.nome,
+            total: valorFinal,
+            description: `Pedido FutStore - ${dados.itens.map(i => `${i.nome} (${i.tamanho}) x${i.quantidade}`).join(', ')}`,
+            lineItems: lineItems
+          };
+
+          console.log('📤 Enviando para backend:', JSON.stringify(payload, null, 2));
+
           const response = await fetch('https://futstore-backend.onrender.com/create-checkout-session', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              customerEmail: dados.email,
-              customerName: dados.nome,
-              total: valorFinal,
-              description: `Pedido FutStore - ${dados.itens.map(i => `${i.nome} (${i.tamanho}) x${i.quantidade}`).join(', ')}`,
-              lineItems: [{
-                price_data: {
-                  unit_amount: Math.round(valorFinal * 100),
-                  currency: 'brl',
-                  product_data: { name: 'Pedido FutStore' }
-                },
-                quantity: 1
-              }]
-            })
+            body: JSON.stringify(payload)
           });
 
           const session = await response.json();
