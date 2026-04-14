@@ -2047,9 +2047,14 @@
 
       if (totalItens >= 3) {
         const gruposDe3 = Math.floor(totalItens / 3);
-        // Desconto = valor que excede R$ 99 por grupo de 3
-        desconto = gruposDe3 * (subtotal - 99);
-        precoFinal = 99; // Para cada grupo de 3, paga R$ 99
+        const itensRestantes = totalItens % 3;
+        const precoMedio = subtotal / totalItens;
+        
+        // Cada grupo de 3 = R$ 99, itens restantes = preço normal
+        const valorGrupos = gruposDe3 * 99;
+        const valorRestantes = itensRestantes * precoMedio;
+        precoFinal = valorGrupos + valorRestantes;
+        desconto = subtotal - precoFinal;
       }
 
       lista.innerHTML = carrinho.map((item, index) => `
